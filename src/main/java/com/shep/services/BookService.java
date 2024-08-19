@@ -35,7 +35,6 @@ public class BookService {
 
     public Book createBook(Book book, String token) {
         Book savedBook = bookRepository.save(book);
-        // Отправка запроса в LibraryService
         FreeBookDTO freeBookDTO = new FreeBookDTO();
         freeBookDTO.setBookId(savedBook.getId());
 
