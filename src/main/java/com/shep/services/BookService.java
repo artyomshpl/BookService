@@ -1,8 +1,12 @@
 package com.shep.services;
 
+import com.shep.dto.FreeBookDTO;
 import com.shep.entities.Book;
 import com.shep.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,16 +33,24 @@ public class BookService {
         return bookRepository.findByIsbn(isbn);
     }
 
-    public Book createBook(Book book) {
-//        if(TokenValidator.tokenValidCheck(token)){
-            Book savedBook = bookRepository.save(book);
-            // Отправка запроса в LibraryService
-            //restTemplate.postForEntity("http://localhost:8083/api/library", savedBook, FreeBookDTO.class);
-            return savedBook;
-//        } else {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
-//        }
+    public Book createBook(Book book, String token) {
+        Book savedBook = bookRepository.save(book);
+        // Отправка запроса в LibraryService
+        FreeBookDTO freeBookDTO = new FreeBookDTO();
+        freeBookDTO.setBookId(savedBook.getId());
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+        HttpEntity<FreeBookDTO> entity = new HttpEntity<>(freeBookDTO, headers);
+
+        restTemplate.exchange(
+                "http://localhost:8083/api/library",
+                HttpMethod.POST,
+                entity,
+                FreeBookDTO.class
+        );
+
+        return savedBook;
     }
 
     public Book updateBook(Long id, Book bookDetails) {

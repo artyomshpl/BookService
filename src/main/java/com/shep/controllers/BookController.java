@@ -40,8 +40,8 @@ public class BookController {
     }
 
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        return bookService.createBook(book);
+    public Book createBook(@RequestHeader("Authorization") String token, @RequestBody Book book) {
+        return bookService.createBook(book, token);
     }
 
     @PutMapping("/{id}")
