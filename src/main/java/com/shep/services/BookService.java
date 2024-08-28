@@ -56,7 +56,7 @@ public class BookService {
         return BookMapper.INSTANCE.toDto(savedBook);
     }
 
-    public Book updateBook(Long id, Book bookDetails) {
+    public BookDTO updateBook(Long id, BookDTO bookDetails) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book != null) {
             book.setIsbn(bookDetails.getIsbn());
@@ -64,7 +64,8 @@ public class BookService {
             book.setGenre(bookDetails.getGenre());
             book.setDescription(bookDetails.getDescription());
             book.setAuthor(bookDetails.getAuthor());
-            return bookRepository.save(book);
+            Book savedBook = bookRepository.save(book);
+            return BookMapper.INSTANCE.toDto(savedBook);
         }
         return null;
     }

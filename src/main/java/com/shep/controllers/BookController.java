@@ -84,12 +84,12 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class))}),
+                            schema = @Schema(implementation = BookDTO.class))}),
             @ApiResponse(responseCode = "404", description = "Book not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book bookDetails) {
-        Book updatedBook = bookService.updateBook(id, bookDetails);
+    public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDetails) {
+        BookDTO updatedBook = bookService.updateBook(id, bookDetails);
         if (updatedBook != null) {
             return ResponseEntity.ok(updatedBook);
         } else {
