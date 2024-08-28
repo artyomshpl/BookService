@@ -1,7 +1,9 @@
 package com.shep.services;
 
+import com.shep.dto.BookDTO;
 import com.shep.dto.FreeBookDTO;
 import com.shep.entities.Book;
+import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -33,8 +35,10 @@ public class BookService {
         return bookRepository.findByIsbn(isbn);
     }
 
-    public Book createBook(Book book, String token) {
+    public BookDTO createBook(BookDTO bookDTO, String token) {
+        Book book = BookMapper.INSTANCE.toEntity(bookDTO);
         Book savedBook = bookRepository.save(book);
+
         FreeBookDTO freeBookDTO = new FreeBookDTO();
         freeBookDTO.setBookId(savedBook.getId());
 
@@ -49,7 +53,7 @@ public class BookService {
                 FreeBookDTO.class
         );
 
-        return savedBook;
+        return BookMapper.INSTANCE.toDto(savedBook);
     }
 
     public Book updateBook(Long id, Book bookDetails) {

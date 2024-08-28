@@ -1,5 +1,6 @@
 package com.shep.controllers;
 
+import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
 import com.shep.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,13 +71,13 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class))}),
+                            schema = @Schema(implementation = BookDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
     })
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
-    public Book createBook(@RequestHeader("Authorization") String token, @RequestBody Book book) {
-        return bookService.createBook(book, token);
+    public BookDTO createBook(@RequestHeader("Authorization") String token, @RequestBody BookDTO bookDTO) {
+        return bookService.createBook(bookDTO, token);
     }
 
     @Operation(summary = "Update a book")
