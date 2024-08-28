@@ -12,6 +12,6 @@ import java.time.LocalDateTime;
 public class FreeBookDTO {
     private Long id;
     private Long bookId;
-    private LocalDateTime borrowedTime = LocalDateTime.now();
+    private LocalDateTime borrowedTime;
     private LocalDateTime returnTime;
 }

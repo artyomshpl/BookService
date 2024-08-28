@@ -10,10 +10,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
@@ -21,16 +21,16 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @Operation(summary = "Get all books")
+    @Operation(summary = "Get all books with pagination")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class))}),
+                            schema = @Schema(implementation = Page.class))}),
             @ApiResponse(responseCode = "404", description = "Books not found", content = @Content)
     })
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookService.getAllBooks(pageable);
     }
 
     @Operation(summary = "Get a book by ID")

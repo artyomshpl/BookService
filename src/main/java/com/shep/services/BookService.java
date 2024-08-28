@@ -6,13 +6,13 @@ import com.shep.entities.Book;
 import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Service
 public class BookService {
@@ -21,10 +21,8 @@ public class BookService {
     @Autowired
     private RestTemplate restTemplate;
 
-
-
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
 
     public Book getBookById(Long id) {
