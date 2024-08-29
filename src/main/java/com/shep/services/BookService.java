@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -70,7 +71,18 @@ public class BookService {
         return null;
     }
 
-    public void deleteBook(Long id) {
+    public void deleteBook(Long id, String token) {
         bookRepository.deleteById(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(
+                "http://localhost:8083/api/library/book/" + id,
+                HttpMethod.DELETE,
+                entity,
+                Void.class
+        );
     }
 }

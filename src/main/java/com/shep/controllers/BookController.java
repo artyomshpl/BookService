@@ -96,9 +96,10 @@ public class BookController {
             @ApiResponse(responseCode = "204", description = "Successful operation"),
             @ApiResponse(responseCode = "404", description = "Book not found", content = @Content)
     })
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        bookService.deleteBook(id);
+    public ResponseEntity<Void> deleteBook(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        bookService.deleteBook(id, token);
         return ResponseEntity.noContent().build();
     }
 }
