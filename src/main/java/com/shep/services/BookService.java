@@ -1,19 +1,13 @@
 package com.shep.services;
 
 import com.shep.dto.BookDTO;
-import com.shep.dto.FreeBookDTO;
 import com.shep.entities.Book;
 import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -22,7 +16,7 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final RestTemplate restTemplate;
+    private final LibraryServiceClient libraryServiceClient;
 
     public Page<Book> getAllBooks(Pageable pageable) {
         return bookRepository.findAll(pageable);
@@ -40,19 +34,7 @@ public class BookService {
         Book book = BookMapper.INSTANCE.toEntity(bookDTO);
         Book savedBook = bookRepository.save(book);
 
-        FreeBookDTO freeBookDTO = new FreeBookDTO();
-        freeBookDTO.setBookId(savedBook.getId());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token);
-        HttpEntity<FreeBookDTO> entity = new HttpEntity<>(freeBookDTO, headers);
-
-        restTemplate.exchange(
-                "http://localhost:8083/api/library",
-                HttpMethod.POST,
-                entity,
-                FreeBookDTO.class
-        );
+        libraryServiceClient.createFreeBook(savedBook.getId(), token);
 
         return BookMapper.INSTANCE.toDto(savedBook);
     }
@@ -73,16 +55,6 @@ public class BookService {
 
     public void deleteBook(Long id, String token) {
         bookRepository.deleteById(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token);
-
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<Void> response = restTemplate.exchange(
-                "http://localhost:8083/api/library/book/" + id,
-                HttpMethod.DELETE,
-                entity,
-                Void.class
-        );
+        libraryServiceClient.deleteFreeBook(id, token);
     }
 }
