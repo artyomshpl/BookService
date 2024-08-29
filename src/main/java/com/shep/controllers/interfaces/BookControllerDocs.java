@@ -1,27 +1,20 @@
-package com.shep.controllers;
+package com.shep.controllers.interfaces;
+
 
 import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
-import com.shep.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
-@RestController
-@RequestMapping("/api/books")
-public class BookController {
-    @Autowired
-    private BookService bookService;
+public interface BookControllerDocs {
 
     @Operation(summary = "Get all books with pagination")
     @ApiResponses(value = {
@@ -31,9 +24,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Books not found", content = @Content)
     })
     @GetMapping
-    public Page<Book> getAllBooks(Pageable pageable) {
-        return bookService.getAllBooks(pageable);
-    }
+    Page<Book> getAllBooks(Pageable pageable);
 
     @Operation(summary = "Get a book by ID")
     @ApiResponses(value = {
@@ -43,10 +34,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found", content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
-        Optional<Book> book = bookService.getBookById(id);
-        return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    ResponseEntity<Book> getBookById(@PathVariable Long id);
 
     @Operation(summary = "Get a book by ISBN")
     @ApiResponses(value = {
@@ -56,10 +44,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found", content = @Content)
     })
     @GetMapping("/isbn/{isbn}")
-    public ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn) {
-        Optional<Book> book = bookService.getBookByIsbn(isbn);
-        return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn);
 
     @Operation(summary = "Create a new book")
     @ApiResponses(value = {
@@ -70,9 +55,7 @@ public class BookController {
     })
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
-    public BookDTO createBook(@RequestHeader("Authorization") String token, @RequestBody BookDTO bookDTO) {
-        return bookService.createBook(bookDTO, token);
-    }
+    BookDTO createBook(@RequestHeader("Authorization") String token, @RequestBody BookDTO bookDTO);
 
     @Operation(summary = "Update a book")
     @ApiResponses(value = {
@@ -82,14 +65,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDetails) {
-        BookDTO updatedBook = bookService.updateBook(id, bookDetails);
-        if (updatedBook != null) {
-            return ResponseEntity.ok(updatedBook);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDetails);
 
     @Operation(summary = "Delete a book")
     @ApiResponses(value = {
@@ -98,8 +74,5 @@ public class BookController {
     })
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        bookService.deleteBook(id, token);
-        return ResponseEntity.noContent().build();
-    }
+    ResponseEntity<Void> deleteBook(@RequestHeader("Authorization") String token, @PathVariable Long id);
 }
