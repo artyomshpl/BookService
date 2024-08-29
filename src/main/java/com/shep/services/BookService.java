@@ -5,6 +5,7 @@ import com.shep.dto.FreeBookDTO;
 import com.shep.entities.Book;
 import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -17,15 +18,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
     private final RestTemplate restTemplate;
-
-    public BookService(BookRepository bookRepository, RestTemplate restTemplate) {
-        this.bookRepository = bookRepository;
-        this.restTemplate = restTemplate;
-    }
 
     public Page<Book> getAllBooks(Pageable pageable) {
         return bookRepository.findAll(pageable);

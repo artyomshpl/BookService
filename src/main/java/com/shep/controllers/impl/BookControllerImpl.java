@@ -4,6 +4,7 @@ import com.shep.controllers.interfaces.BookControllerDocs;
 import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
 import com.shep.services.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
+@RequiredArgsConstructor
 public class BookControllerImpl implements BookControllerDocs {
 
     private final BookService bookService;
 
-    public BookControllerImpl(BookService bookService) {
-        this.bookService = bookService;
-    }
     @Override
     public Page<Book> getAllBooks(Pageable pageable) {
         return bookService.getAllBooks(pageable);
