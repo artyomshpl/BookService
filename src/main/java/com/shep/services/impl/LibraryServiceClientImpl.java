@@ -1,6 +1,7 @@
-package com.shep.services;
+package com.shep.services.impl;
 
 import com.shep.dto.FreeBookDTO;
+import com.shep.services.interfaces.LibraryServiceClientInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,10 +12,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class LibraryServiceClient {
+public class LibraryServiceClientImpl implements LibraryServiceClientInterface {
 
     private final RestTemplate restTemplate;
 
+    @Override
     public void createFreeBook(Long bookId, String token) {
         FreeBookDTO freeBookDTO = new FreeBookDTO();
         freeBookDTO.setBookId(bookId);
@@ -31,6 +33,7 @@ public class LibraryServiceClient {
         );
     }
 
+    @Override
     public void deleteFreeBook(Long bookId, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);

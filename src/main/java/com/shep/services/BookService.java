@@ -4,6 +4,7 @@ import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
 import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
+import com.shep.services.impl.LibraryServiceClientImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final LibraryServiceClient libraryServiceClient;
+    private final LibraryServiceClientImpl libraryServiceClientImpl;
 
     public Page<Book> getAllBooks(Pageable pageable) {
         return bookRepository.findAll(pageable);
@@ -34,7 +35,7 @@ public class BookService {
         Book book = BookMapper.INSTANCE.toEntity(bookDTO);
         Book savedBook = bookRepository.save(book);
 
-        libraryServiceClient.createFreeBook(savedBook.getId(), token);
+        libraryServiceClientImpl.createFreeBook(savedBook.getId(), token);
 
         return BookMapper.INSTANCE.toDto(savedBook);
     }
@@ -55,6 +56,6 @@ public class BookService {
 
     public void deleteBook(Long id, String token) {
         bookRepository.deleteById(id);
-        libraryServiceClient.deleteFreeBook(id, token);
+        libraryServiceClientImpl.deleteFreeBook(id, token);
     }
 }
