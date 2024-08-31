@@ -44,11 +44,7 @@ public class BookControllerImpl implements BookControllerDocs {
     @Override
     public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDetails) {
         BookDTO updatedBook = bookService.updateBook(id, bookDetails);
-        if (updatedBook != null) {
-            return ResponseEntity.ok(updatedBook);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(updatedBook);
     }
 
     @Override

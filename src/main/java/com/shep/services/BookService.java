@@ -2,6 +2,7 @@ package com.shep.services;
 
 import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
+import com.shep.exceptions.NotFoundException;
 import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
 import com.shep.services.impl.LibraryServiceClientImpl;
@@ -41,20 +42,20 @@ public class BookService {
     }
 
     public BookDTO updateBook(Long id, BookDTO bookDetails) {
-        Book book = bookRepository.findById(id).orElse(null);
-        if (book != null) {
-            book.setIsbn(bookDetails.getIsbn());
-            book.setTitle(bookDetails.getTitle());
-            book.setGenre(bookDetails.getGenre());
-            book.setDescription(bookDetails.getDescription());
-            book.setAuthor(bookDetails.getAuthor());
-            Book savedBook = bookRepository.save(book);
-            return BookMapper.INSTANCE.toDto(savedBook);
-        }
-        return null;
+        Book book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book not found with id " + id));
+        book.setIsbn(bookDetails.getIsbn());
+        book.setTitle(bookDetails.getTitle());
+        book.setGenre(bookDetails.getGenre());
+        book.setDescription(bookDetails.getDescription());
+        book.setAuthor(bookDetails.getAuthor());
+        Book savedBook = bookRepository.save(book);
+        return BookMapper.INSTANCE.toDto(savedBook);
     }
 
     public void deleteBook(Long id, String token) {
+        if (!bookRepository.existsById(id)) {
+            throw new NotFoundException("Book not found with id " + id);
+        }
         bookRepository.deleteById(id);
         libraryServiceClientImpl.deleteFreeBook(id, token);
     }
