@@ -22,6 +22,8 @@
     <springdoc-openapi.version>2.0.2</springdoc-openapi.version>
     <lombok.version>1.18.32</lombok.version>
     <mapstruct.version>1.5.2.Final</mapstruct.version>
+    <spring-security-test.version>6.3.1</spring-security-test.version>
+    <mokito-core.version>5.11.0</mokito-core.version>
   </properties>
 
   <dependencies>
@@ -85,6 +87,24 @@
       <artifactId>mapstruct-processor</artifactId>
       <version>${mapstruct.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <version>${spring-security-test.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mokito-core.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
