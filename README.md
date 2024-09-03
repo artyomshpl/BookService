@@ -19,3 +19,9 @@ Instruction for starting the app:
 5) Build the docker images, start the services defined in the docker-compose.yml file using inteligi idea or terminal
 
 P.S. while running mvn clean package tests will be passing, to make it build and run faster u can do packaging with no testing if needed
+
+After running all the microservices go to 
+http://localhost:8081/swagger-ui/index.html
+http://localhost:8082/swagger-ui/index.html
+http://localhost:8083/swagger-ui/index.html
+for using and testing the app comfortably and with the necessary instructions
