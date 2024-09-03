@@ -22,7 +22,7 @@ public class TokenValidator {
 
             try {
                 ResponseEntity<String> responseEntity = restTemplate.exchange(
-                        "http://localhost:8081/auth/validate-token",
+                        "http://auth-service:8081/auth/validate-token",
                         HttpMethod.POST,
                         entity,
                         String.class

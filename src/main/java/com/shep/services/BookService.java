@@ -1,71 +1,62 @@
 package com.shep.services;
 
-import com.shep.dto.FreeBookDTO;
+import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
+import com.shep.exceptions.NotFoundException;
+import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import com.shep.services.impl.LibraryServiceClientImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
-    @Autowired
-    private BookRepository bookRepository;
-    @Autowired
-    private RestTemplate restTemplate;
 
+    private final BookRepository bookRepository;
+    private final LibraryServiceClientImpl libraryServiceClientImpl;
 
-
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
 
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+    public Optional<Book> getBookById(Long id) {
+        return bookRepository.findById(id);
     }
 
-    public Book getBookByIsbn(String isbn) {
+    public Optional<Book> getBookByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn);
     }
 
-    public Book createBook(Book book, String token) {
+    public BookDTO createBook(BookDTO bookDTO, String token) {
+        Book book = BookMapper.INSTANCE.toEntity(bookDTO);
         Book savedBook = bookRepository.save(book);
-        FreeBookDTO freeBookDTO = new FreeBookDTO();
-        freeBookDTO.setBookId(savedBook.getId());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token);
-        HttpEntity<FreeBookDTO> entity = new HttpEntity<>(freeBookDTO, headers);
+        libraryServiceClientImpl.createFreeBook(savedBook.getId(), token);
 
-        restTemplate.exchange(
-                "http://localhost:8083/api/library",
-                HttpMethod.POST,
-                entity,
-                FreeBookDTO.class
-        );
-
-        return savedBook;
+        return BookMapper.INSTANCE.toDto(savedBook);
     }
 
-    public Book updateBook(Long id, Book bookDetails) {
-        Book book = bookRepository.findById(id).orElse(null);
-        if (book != null) {
-            book.setIsbn(bookDetails.getIsbn());
-            book.setTitle(bookDetails.getTitle());
-            book.setGenre(bookDetails.getGenre());
-            book.setDescription(bookDetails.getDescription());
-            book.setAuthor(bookDetails.getAuthor());
-            return bookRepository.save(book);
+    public BookDTO updateBook(Long id, BookDTO bookDetails) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book not found with id " + id));
+        book.setIsbn(bookDetails.getIsbn());
+        book.setTitle(bookDetails.getTitle());
+        book.setGenre(bookDetails.getGenre());
+        book.setDescription(bookDetails.getDescription());
+        book.setAuthor(bookDetails.getAuthor());
+        Book savedBook = bookRepository.save(book);
+        return BookMapper.INSTANCE.toDto(savedBook);
+    }
+
+    public void deleteBook(Long id, String token) {
+        if (!bookRepository.existsById(id)) {
+            throw new NotFoundException("Book not found with id " + id);
         }
-        return null;
-    }
-
-    public void deleteBook(Long id) {
         bookRepository.deleteById(id);
+        libraryServiceClientImpl.deleteFreeBook(id, token);
     }
 }
