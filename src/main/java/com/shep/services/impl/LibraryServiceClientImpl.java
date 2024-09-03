@@ -26,7 +26,7 @@ public class LibraryServiceClientImpl implements LibraryServiceClientInterface {
         HttpEntity<FreeBookDTO> entity = new HttpEntity<>(freeBookDTO, headers);
 
         restTemplate.exchange(
-                "http://localhost:8083/api/library",
+                "http://library-service:8083/api/library",
                 HttpMethod.POST,
                 entity,
                 FreeBookDTO.class
@@ -41,7 +41,7 @@ public class LibraryServiceClientImpl implements LibraryServiceClientInterface {
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         ResponseEntity<Void> response = restTemplate.exchange(
-                "http://localhost:8083/api/library/book/" + bookId,
+                "http://library-service:8083/api/library/book/" + bookId,
                 HttpMethod.DELETE,
                 entity,
                 Void.class
