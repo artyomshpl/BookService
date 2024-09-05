@@ -2,6 +2,7 @@ package com.shep.services;
 
 import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
+import com.shep.exceptions.DuplicateIsbnException;
 import com.shep.exceptions.NotFoundException;
 import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
@@ -33,6 +34,11 @@ public class BookService {
     }
 
     public BookDTO createBook(BookDTO bookDTO, String token) {
+        Optional<Book> existingBook = bookRepository.findByIsbn(bookDTO.getIsbn());
+        if (existingBook.isPresent()) {
+            throw new DuplicateIsbnException("Book with ISBN " + bookDTO.getIsbn() + " already exists");
+        }
+
         Book book = BookMapper.INSTANCE.toEntity(bookDTO);
         Book savedBook = bookRepository.save(book);
 
@@ -40,6 +46,7 @@ public class BookService {
 
         return BookMapper.INSTANCE.toDto(savedBook);
     }
+
 
     public BookDTO updateBook(Long id, BookDTO bookDetails) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book not found with id " + id));
