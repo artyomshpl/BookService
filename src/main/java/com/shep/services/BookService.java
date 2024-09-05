@@ -50,6 +50,12 @@ public class BookService {
 
     public BookDTO updateBook(Long id, BookDTO bookDetails) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book not found with id " + id));
+
+        Optional<Book> existingBook = bookRepository.findByIsbnAndIdNot(bookDetails.getIsbn(), id);
+        if (existingBook.isPresent()) {
+            throw new DuplicateIsbnException("Book with ISBN " + bookDetails.getIsbn() + " already exists");
+        }
+
         book.setIsbn(bookDetails.getIsbn());
         book.setTitle(bookDetails.getTitle());
         book.setGenre(bookDetails.getGenre());
