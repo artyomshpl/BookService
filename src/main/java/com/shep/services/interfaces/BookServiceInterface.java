@@ -1,7 +1,7 @@
 package com.shep.services.interfaces;
 
-import com.shep.dto.BookDTO;
-import com.shep.entities.Book;
+import com.shep.dataTransferObjects.BookDTO;
+import com.shep.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

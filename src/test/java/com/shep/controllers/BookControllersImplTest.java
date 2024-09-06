@@ -1,9 +1,9 @@
 package com.shep.controllers;
 
 import com.shep.controllers.impl.BookControllerImpl;
-import com.shep.dto.BookDTO;
-import com.shep.entities.Book;
-import com.shep.services.impl.BookServiceImpl;
+import com.shep.dataTransferObjects.BookDTO;
+import com.shep.entity.Book;
+import com.shep.services.implementation.BookServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;

@@ -1,6 +1,6 @@
-package com.shep.services.impl;
+package com.shep.services.implementation;
 
-import com.shep.dto.FreeBookDTO;
+import com.shep.dataTransferObjects.FreeBookDTO;
 import com.shep.services.interfaces.LibraryServiceClientInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;

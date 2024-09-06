@@ -1,11 +1,11 @@
-package com.shep.services.impl;
+package com.shep.services.implementation;
 
-import com.shep.dto.BookDTO;
-import com.shep.entities.Book;
+import com.shep.dataTransferObjects.BookDTO;
+import com.shep.entity.Book;
 import com.shep.exceptions.DuplicateIsbnException;
 import com.shep.exceptions.NotFoundException;
 import com.shep.mapper.BookMapper;
-import com.shep.repositories.BookRepository;
+import com.shep.repository.BookRepository;
 import com.shep.services.interfaces.LibraryServiceClientInterface;
 import com.shep.services.interfaces.BookServiceInterface;
 import lombok.RequiredArgsConstructor;

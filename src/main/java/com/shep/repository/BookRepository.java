@@ -1,7 +1,7 @@
-package com.shep.repositories;
+package com.shep.repository;
 
 
-import com.shep.entities.Book;
+import com.shep.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,8 @@
 package com.shep.controllers.impl;
 
 import com.shep.controllers.interfaces.BookControllerDocs;
-import com.shep.dto.BookDTO;
-import com.shep.entities.Book;
+import com.shep.dataTransferObjects.BookDTO;
+import com.shep.entity.Book;
 import com.shep.services.interfaces.BookServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

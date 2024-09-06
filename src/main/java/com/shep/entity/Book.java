@@ -1,4 +1,4 @@
-package com.shep.entities;
+package com.shep.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

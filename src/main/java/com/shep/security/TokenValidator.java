@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class TokenValidator {
     private static final Logger logger = LoggerFactory.getLogger(TokenValidator.class);
 
-    private static final String VALIDATE_TOKEN_URL = "http://auth-service:8081/auth/validate-token";
+    private static final String VALIDATE_TOKEN_URL = "http://localhost:8081/auth/validate-token";
 
     public static Boolean tokenValidCheck(String token) {
         if (token != null && token.startsWith("Bearer ")) {

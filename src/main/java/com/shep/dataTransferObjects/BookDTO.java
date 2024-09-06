@@ -1,4 +1,4 @@
-package com.shep.dto;
+package com.shep.dataTransferObjects;
 
 import lombok.Getter;
 import lombok.Setter;

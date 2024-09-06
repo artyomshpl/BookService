@@ -1,12 +1,12 @@
 package com.shep.services;
 
-import com.shep.dto.BookDTO;
-import com.shep.entities.Book;
+import com.shep.dataTransferObjects.BookDTO;
+import com.shep.entity.Book;
 import com.shep.exceptions.NotFoundException;
 import com.shep.mapper.BookMapper;
-import com.shep.repositories.BookRepository;
-import com.shep.services.impl.BookServiceImpl;
-import com.shep.services.impl.LibraryServiceClientImpl;
+import com.shep.repository.BookRepository;
+import com.shep.services.implementation.BookServiceImpl;
+import com.shep.services.implementation.LibraryServiceClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
