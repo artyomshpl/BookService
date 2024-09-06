@@ -1,4 +1,4 @@
-package com.shep.config;
+package com.shep.configuration;
 
 import com.shep.security.JwtAuthenticationInterceptor;
 import lombok.RequiredArgsConstructor;

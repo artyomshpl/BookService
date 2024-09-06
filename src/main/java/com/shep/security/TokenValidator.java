@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 public class TokenValidator {
     private static final Logger logger = LoggerFactory.getLogger(TokenValidator.class);
 
+    private static final String VALIDATE_TOKEN_URL = "http://localhost:8081/auth/validate-token";
+
     public static Boolean tokenValidCheck(String token) {
         if (token != null && token.startsWith("Bearer ")) {
             String jwt = token.substring(7);
@@ -22,7 +24,7 @@ public class TokenValidator {
 
             try {
                 ResponseEntity<String> responseEntity = restTemplate.exchange(
-                        "http://auth-service:8081/auth/validate-token",
+                        VALIDATE_TOKEN_URL,
                         HttpMethod.POST,
                         entity,
                         String.class

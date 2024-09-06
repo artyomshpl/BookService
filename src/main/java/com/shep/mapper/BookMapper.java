@@ -1,7 +1,7 @@
 package com.shep.mapper;
 
-import com.shep.dto.BookDTO;
-import com.shep.entities.Book;
+import com.shep.dataTransferObjects.BookDTO;
+import com.shep.entity.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

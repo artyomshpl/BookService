@@ -1,6 +1,6 @@
-package com.shep.services.impl;
+package com.shep.services.implementation;
 
-import com.shep.dto.FreeBookDTO;
+import com.shep.dataTransferObjects.FreeBookDTO;
 import com.shep.services.interfaces.LibraryServiceClientInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -16,6 +16,9 @@ public class LibraryServiceClientImpl implements LibraryServiceClientInterface {
 
     private final RestTemplate restTemplate;
 
+    private static final String CREATE_FREE_BOOK_URL = "http://library-service:8083/api/library";
+    private static final String DELETE_FREE_BOOK_URL = "http://library-service:8083/api/library/book/";
+
     @Override
     public void createFreeBook(Long bookId, String token) {
         FreeBookDTO freeBookDTO = new FreeBookDTO();
@@ -26,7 +29,7 @@ public class LibraryServiceClientImpl implements LibraryServiceClientInterface {
         HttpEntity<FreeBookDTO> entity = new HttpEntity<>(freeBookDTO, headers);
 
         restTemplate.exchange(
-                "http://library-service:8083/api/library",
+                CREATE_FREE_BOOK_URL,
                 HttpMethod.POST,
                 entity,
                 FreeBookDTO.class
@@ -41,7 +44,7 @@ public class LibraryServiceClientImpl implements LibraryServiceClientInterface {
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         ResponseEntity<Void> response = restTemplate.exchange(
-                "http://library-service:8083/api/library/book/" + bookId,
+                DELETE_FREE_BOOK_URL + bookId,
                 HttpMethod.DELETE,
                 entity,
                 Void.class
