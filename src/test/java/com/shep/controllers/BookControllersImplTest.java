@@ -3,7 +3,7 @@ package com.shep.controllers;
 import com.shep.controllers.impl.BookControllerImpl;
 import com.shep.dto.BookDTO;
 import com.shep.entities.Book;
-import com.shep.services.BookService;
+import com.shep.services.impl.BookServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 public class BookControllersImplTest {
 
     @Mock
-    private BookService bookService;
+    private BookServiceImpl bookServiceImpl;
 
     @InjectMocks
     private BookControllerImpl bookControllerImpl;
@@ -47,7 +47,7 @@ public class BookControllersImplTest {
         book2.setTitle("Book 2");
         Page<Book> bookPage = new PageImpl<>(Arrays.asList(book1, book2), pageable, 2);
 
-        when(bookService.getAllBooks(pageable)).thenReturn(bookPage);
+        when(bookServiceImpl.getAllBooks(pageable)).thenReturn(bookPage);
 
         Page<Book> result = bookControllerImpl.getAllBooks(pageable);
 
@@ -63,7 +63,7 @@ public class BookControllersImplTest {
         book.setId(id);
         book.setTitle("Book 1");
 
-        when(bookService.getBookById(id)).thenReturn(Optional.of(book));
+        when(bookServiceImpl.getBookById(id)).thenReturn(Optional.of(book));
 
         ResponseEntity<Book> response = bookControllerImpl.getBookById(id);
 
@@ -75,7 +75,7 @@ public class BookControllersImplTest {
     public void testGetBookByIdNotFound() {
         Long id = 1L;
 
-        when(bookService.getBookById(id)).thenReturn(Optional.empty());
+        when(bookServiceImpl.getBookById(id)).thenReturn(Optional.empty());
 
         ResponseEntity<Book> response = bookControllerImpl.getBookById(id);
 
@@ -89,7 +89,7 @@ public class BookControllersImplTest {
         book.setIsbn(isbn);
         book.setTitle("Book 1");
 
-        when(bookService.getBookByIsbn(isbn)).thenReturn(Optional.of(book));
+        when(bookServiceImpl.getBookByIsbn(isbn)).thenReturn(Optional.of(book));
 
         ResponseEntity<Book> response = bookControllerImpl.getBookByIsbn(isbn);
 
@@ -101,7 +101,7 @@ public class BookControllersImplTest {
     public void testGetBookByIsbnNotFound() {
         String isbn = "1234567890";
 
-        when(bookService.getBookByIsbn(isbn)).thenReturn(Optional.empty());
+        when(bookServiceImpl.getBookByIsbn(isbn)).thenReturn(Optional.empty());
 
         ResponseEntity<Book> response = bookControllerImpl.getBookByIsbn(isbn);
 
@@ -117,7 +117,7 @@ public class BookControllersImplTest {
         BookDTO createdBookDTO = new BookDTO();
         createdBookDTO.setTitle("New Book");
 
-        when(bookService.createBook(bookDTO, token)).thenReturn(createdBookDTO);
+        when(bookServiceImpl.createBook(bookDTO, token)).thenReturn(createdBookDTO);
 
         BookDTO result = bookControllerImpl.createBook(token, bookDTO);
 
@@ -133,7 +133,7 @@ public class BookControllersImplTest {
         BookDTO updatedBookDTO = new BookDTO();
         updatedBookDTO.setTitle("Updated Book");
 
-        when(bookService.updateBook(id, bookDTO)).thenReturn(updatedBookDTO);
+        when(bookServiceImpl.updateBook(id, bookDTO)).thenReturn(updatedBookDTO);
 
         ResponseEntity<BookDTO> response = bookControllerImpl.updateBook(id, bookDTO);
 
@@ -146,7 +146,7 @@ public class BookControllersImplTest {
         Long id = 1L;
         String token = "Bearer token";
 
-        doNothing().when(bookService).deleteBook(id, token);
+        doNothing().when(bookServiceImpl).deleteBook(id, token);
 
         ResponseEntity<Void> response = bookControllerImpl.deleteBook(token, id);
 

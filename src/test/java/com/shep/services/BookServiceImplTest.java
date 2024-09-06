@@ -5,6 +5,7 @@ import com.shep.entities.Book;
 import com.shep.exceptions.NotFoundException;
 import com.shep.mapper.BookMapper;
 import com.shep.repositories.BookRepository;
+import com.shep.services.impl.BookServiceImpl;
 import com.shep.services.impl.LibraryServiceClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class BookServiceTest {
+public class BookServiceImplTest {
 
     @Mock
     private BookRepository bookRepository;
@@ -33,7 +34,7 @@ public class BookServiceTest {
     private LibraryServiceClientImpl libraryServiceClientImpl;
 
     @InjectMocks
-    private BookService bookService;
+    private BookServiceImpl bookServiceImpl;
 
     @BeforeEach
     public void setUp() {
@@ -53,7 +54,7 @@ public class BookServiceTest {
 
         when(bookRepository.findAll(pageable)).thenReturn(bookPage);
 
-        Page<Book> result = bookService.getAllBooks(pageable);
+        Page<Book> result = bookServiceImpl.getAllBooks(pageable);
 
         assertEquals(2, result.getTotalElements());
         assertEquals("Book 1", result.getContent().get(0).getTitle());
@@ -69,7 +70,7 @@ public class BookServiceTest {
 
         when(bookRepository.findById(id)).thenReturn(Optional.of(book));
 
-        Optional<Book> result = bookService.getBookById(id);
+        Optional<Book> result = bookServiceImpl.getBookById(id);
 
         assertEquals(id, result.get().getId());
         assertEquals("Book 1", result.get().getTitle());
@@ -81,7 +82,7 @@ public class BookServiceTest {
 
         when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
-        Optional<Book> result = bookService.getBookById(id);
+        Optional<Book> result = bookServiceImpl.getBookById(id);
 
         assertEquals(Optional.empty(), result);
     }
@@ -95,7 +96,7 @@ public class BookServiceTest {
 
         when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.of(book));
 
-        Optional<Book> result = bookService.getBookByIsbn(isbn);
+        Optional<Book> result = bookServiceImpl.getBookByIsbn(isbn);
 
         assertEquals(isbn, result.get().getIsbn());
         assertEquals("Book 1", result.get().getTitle());
@@ -107,7 +108,7 @@ public class BookServiceTest {
 
         when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.empty());
 
-        Optional<Book> result = bookService.getBookByIsbn(isbn);
+        Optional<Book> result = bookServiceImpl.getBookByIsbn(isbn);
 
         assertEquals(Optional.empty(), result);
     }
@@ -124,7 +125,7 @@ public class BookServiceTest {
         when(bookRepository.save(any(Book.class))).thenReturn(book);
         doNothing().when(libraryServiceClientImpl).createFreeBook(anyLong(), anyString());
 
-        BookDTO result = bookService.createBook(bookDTO, token);
+        BookDTO result = bookServiceImpl.createBook(bookDTO, token);
 
         assertEquals("New Book", result.getTitle());
     }
@@ -146,7 +147,7 @@ public class BookServiceTest {
         when(bookRepository.findById(id)).thenReturn(Optional.of(existingBook));
         when(bookRepository.save(any(Book.class))).thenReturn(updatedBook);
 
-        BookDTO result = bookService.updateBook(id, bookDTO);
+        BookDTO result = bookServiceImpl.updateBook(id, bookDTO);
 
         assertEquals("Updated Book", result.getTitle());
     }
@@ -159,7 +160,7 @@ public class BookServiceTest {
 
         when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> bookService.updateBook(id, bookDTO));
+        assertThrows(NotFoundException.class, () -> bookServiceImpl.updateBook(id, bookDTO));
     }
 
     @Test
@@ -171,7 +172,7 @@ public class BookServiceTest {
         doNothing().when(bookRepository).deleteById(id);
         doNothing().when(libraryServiceClientImpl).deleteFreeBook(anyLong(), anyString());
 
-        bookService.deleteBook(id, token);
+        bookServiceImpl.deleteBook(id, token);
 
         verify(bookRepository).deleteById(id);
         verify(libraryServiceClientImpl).deleteFreeBook(id, token);
@@ -184,6 +185,6 @@ public class BookServiceTest {
 
         when(bookRepository.existsById(id)).thenReturn(false);
 
-        assertThrows(NotFoundException.class, () -> bookService.deleteBook(id, token));
+        assertThrows(NotFoundException.class, () -> bookServiceImpl.deleteBook(id, token));
     }
 }
